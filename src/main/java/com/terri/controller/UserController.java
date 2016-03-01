@@ -6,11 +6,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.terri.inter.IUserOperation;
 import com.terri.model.Article;
+import com.terri.model.User;
 import com.terri.util.page.PageInfo;
 
 @Controller
@@ -18,7 +21,19 @@ import com.terri.util.page.PageInfo;
 public class UserController {
     @Autowired
     IUserOperation userMapper;
-
+    @RequestMapping(value={"/hello","/hello2"})
+    public String hello2(){
+    	return "hello";
+    	
+    }
+    
+    
+    @RequestMapping("/listuser")
+    public @ResponseBody List<User> List(ModelMap modelMap){
+    	 List<User> u=userMapper.selectUsers("%");
+		return u;
+    }
+    
     @RequestMapping("/list")
     public ModelAndView listall(HttpServletRequest request,HttpServletResponse response){
         List<Article> articles=userMapper.getUserArticles(1); 
