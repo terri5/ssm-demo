@@ -30,5 +30,20 @@ public class User {
     public void setUserAddress(String userAddress) {
         this.userAddress = userAddress;
     }
+	public String getName() {
+		// TODO Auto-generated method stub
+		return getUserName();
+	}
+	public int getAge() {
+		return getUserAge();
+	}
+	public void setName(String name) {
+		setUserName(name);
+		
+	}
+	public void setAge(int age) {
+		setUserAge(age);
+		
+	}
 
 }

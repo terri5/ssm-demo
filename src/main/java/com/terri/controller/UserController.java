@@ -21,15 +21,17 @@ import com.terri.util.page.PageInfo;
 public class UserController {
     @Autowired
     IUserOperation userMapper;
+    
+    
     @RequestMapping(value={"/hello","/hello2"})
     public String hello2(){
     	return "hello";
     	
     }
     
-    
+    @ResponseBody
     @RequestMapping("/listuser")
-    public @ResponseBody List<User> List(ModelMap modelMap){
+    public  List<User> List(ModelMap modelMap){
     	 List<User> u=userMapper.selectUsers("%");
 		return u;
     }
