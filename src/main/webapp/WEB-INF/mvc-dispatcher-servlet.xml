@@ -10,7 +10,7 @@
         http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
 
     <context:component-scan base-package="com.terri.controller" />
-        <context:component-scan base-package="com.terri.service" />
+     <context:component-scan base-package="com.terri.service" />
     
     <mvc:annotation-driven />
     
@@ -37,10 +37,9 @@
             </list>  
         </property>  
     </bean>  
-    <bean id="jsonConverter"  
-        class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>  
-    <bean  
-        class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">  
+    <bean id="jsonConverter"   class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/> 
+    
+    <bean  class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">  
         <property name="messageConverters">  
             <list>  
                 <ref bean="stringConverter" />  
@@ -49,4 +48,9 @@
         </property>  
     </bean> 
     
+    <!-- 文件上传的解释器  测试restful 文件上传-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	  <property name="maxUploadSize" value="300000"/><!-- Max size in bytes. -->
+	</bean>
+	
 </beans>

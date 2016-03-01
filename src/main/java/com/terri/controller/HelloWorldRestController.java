@@ -5,6 +5,13 @@ import java.util.List;
 
 
 
+
+
+
+
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,7 +21,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.terri.model.User;
@@ -53,7 +63,6 @@ public class HelloWorldRestController {
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
  
-     
      
     //-------------------Create a User--------------------------------------------------------
      
@@ -121,5 +130,15 @@ public class HelloWorldRestController {
         userService.deleteAllUsers();
         return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
     }
+    
+    //------------------- TEST file upload -------------------------------------------------------
+    
+    @RequestMapping(value = "/fileUpload/", method = RequestMethod.POST)
+    @ResponseBody
+    public String upload (@RequestParam("file") MultipartFile multipartFile,HttpServletRequest request) {
+    	System.out.println(multipartFile.getName()+":"+multipartFile.getOriginalFilename());
+    	return "{sucess:true}";
+    }
+     
  
 }
