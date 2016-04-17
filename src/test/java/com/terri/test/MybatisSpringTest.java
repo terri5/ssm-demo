@@ -12,6 +12,8 @@ import com.terri.inter.IBlogOperation;
 import com.terri.inter.IUserOperation;
 import com.terri.model.Blog;
 import com.terri.model.User;
+import com.terri.redis.util.RedisClient;
+import com.terri.service.IUserService;
 import com.terri.util.pagehelper.PageBean;
 
 import static org.junit.Assert.*;
@@ -86,6 +88,16 @@ public class MybatisSpringTest {
          }
     }
     @Test
+    public void ListUserTestService(){
+    	IUserService userService=(IUserService) ctx.getBean("userService");          
+         List<User> users = userService.findAllUsers();
+         for(User user:users){
+             System.out.println(user.getId()+":"+user.getUserName()+":"+user.getUserAddress());
+         }
+    }
+    
+     
+    @Test
     public void pageBlog(){
    	    IBlogOperation mapper=(IBlogOperation)ctx.getBean("IBlogOperation");
     	PageHelper.startPage(2, 3);
@@ -95,6 +107,11 @@ public class MybatisSpringTest {
     	PageBean<Blog> p=new PageBean<Blog>(blogs);
     	System.out.println(p);
     
+    }
+    @Test
+    public void TestRedis(){
+    	RedisClient t=new RedisClient();
+    	t.show();
     }
     
     
