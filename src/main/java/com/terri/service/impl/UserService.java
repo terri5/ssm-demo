@@ -3,6 +3,7 @@ package com.terri.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.terri.inter.IUserOperation;
@@ -20,6 +21,7 @@ public class UserService implements IUserService {
 	* @return 
 	* @see com.terri.service.IUserService#findAllUsers() 
 	*/
+    @Cacheable("findAllUsers")
 	@Override
 	public List<User> findAllUsers() {
 		return userMapper.selectUsers("%");
@@ -56,6 +58,7 @@ public class UserService implements IUserService {
 	* @return 
 	* @see com.terri.service.IUserService#findById(long) 
 	*/
+	@Cacheable("findById")
 	@Override
 	public User findById(int id) {
 		return userMapper.selectUserByID(id);

@@ -12,6 +12,7 @@
     <context:component-scan base-package="com.terri.controller" />
      <context:component-scan base-package="com.terri.service" />
      <context:component-scan base-package="com.terri.cache" />  
+   <!--    <context:component-scan base-package="com.terri.redis.*" />   -->
     <mvc:annotation-driven />
     
     

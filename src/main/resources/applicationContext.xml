@@ -1,72 +1,74 @@
-<?xml version="1.0" encoding="utf-8"?> 
-<beans xmlns="http://www.springframework.org/schema/beans" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:aop="http://www.springframework.org/schema/aop" 
-    xmlns:tx="http://www.springframework.org/schema/tx" 
-    xmlns:context="http://www.springframework.org/schema/context" 
-    xsi:schemaLocation="  
+<?xml version="1.0" encoding="utf-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="  
             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd  
             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd  
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd  
             http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.2.xsd  
-            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd " 
-             default-autowire="byName" default-lazy-init="false" > 
-    
-<!--本示例采用DBCP2连接池，应预先把DBCP的jar包复制到工程的lib目录下。 -->   
- <context:property-placeholder  location="classpath:jdbc.properties" />
-        
- <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"  
-        destroy-method="close">  
-        <property name="driverClassName" value="${driver}" />  
-        <property name="url" value="${url}" />  
-        <property name="username" value="${uname}" />  
-        <property name="password" value="${password}" />  
-        <!-- 初始化连接大小 -->  
-        <property name="initialSize" value="${initialSize}"></property>  
-        <!-- 连接池最大空闲 -->  
-        <property name="maxIdle" value="${maxIdle}"></property>  
-        <!-- 连接池最小空闲 -->  
-        <property name="minIdle" value="${minIdle}"></property>  
-        
-    </bean>  
-  
-    
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-      <property name="dataSource" ref="dataSource" />
-    </bean>
-    
-     
-  <bean id="mySqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> 
-     <!--dataSource属性指定要用到的连接池--> 
-     <property name="dataSource" ref="dataSource"/> 
-     <!--configLocation属性指定mybatis的核心配置文件--> 
-     <property name="configLocation" value="classpath:mybatis-config.xml" />
-     <!-- 所有配置的mapper文件 -->
-     <property name="mapperLocations" value="classpath*:com/terri/mapper/*.xml" />
-     
-    <!--  
-    <property name="plugins">
-            <array>
-                <bean class="com.github.pagehelper.PageHelper">
-                    这里的几个配置主要演示如何使用，如果不理解，一定要去掉下面的配置
-                    <property name="properties">
-                        <value>
-                            dialect=mysql
-                            reasonable=true
-                            supportMethodsArguments=true
-                            params=count=countSql
-                            autoRuntimeDialect=true
-                        </value>
-                    </property>
-                </bean>
-            </array>
-        </property>
-         -->
-  </bean> 
-  
-  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-     <property name="basePackage" value="com.terri.inter" />    
-     <property name="sqlSessionFactoryBeanName" value="mySqlSessionFactory" /> 
-  </bean>
-  
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd "
+	default-autowire="byName" default-lazy-init="false">
+	
+	<!-- 本示例采用DBCP2连接池，应预先把DBCP的jar包复制到工程的lib目录下。  -->
+	<!--   
+	<context:property-placeholder location="classpath:jdbc.properties" 
+		/> <context:property-placeholder location="classpath:redis.properties" /> 
+		<context:property-placeholder location="classpath:cache.properties" />
+		 -->
+		 
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:jdbc.properties</value>
+			</list>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${driver}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${uname}" />
+		<property name="password" value="${password}" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="${initialSize}"></property>
+		<!-- 连接池最大空闲 -->
+		<property name="maxIdle" value="${maxIdle}"></property>
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="${minIdle}"></property>
+
+	</bean>
+
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+
+	<bean id="mySqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!--dataSource属性指定要用到的连接池 -->
+		<property name="dataSource" ref="dataSource" />
+		<!--configLocation属性指定mybatis的核心配置文件 -->
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<!-- 所有配置的mapper文件 -->
+		<property name="mapperLocations" value="classpath*:com/terri/mapper/*.xml" />
+
+		<!-- <property name="plugins"> <array> <bean class="com.github.pagehelper.PageHelper"> 
+			这里的几个配置主要演示如何使用，如果不理解，一定要去掉下面的配置 <property name="properties"> <value> dialect=mysql 
+			reasonable=true supportMethodsArguments=true params=count=countSql autoRuntimeDialect=true 
+			</value> </property> </bean> </array> </property> -->
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.terri.inter" />
+		<property name="sqlSessionFactoryBeanName" value="mySqlSessionFactory" />
+	</bean>	
+	
+	
+
 </beans> 

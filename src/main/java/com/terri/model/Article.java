@@ -1,4 +1,5 @@
 package com.terri.model;
+
 public class Article {
     
     private int id;
@@ -12,7 +13,7 @@ public class Article {
     public void setId(int id) {
         this.id = id;
     }
-    
+   
     public User getUser() {
         return user;
     }

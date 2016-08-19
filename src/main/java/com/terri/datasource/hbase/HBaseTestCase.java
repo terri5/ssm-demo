@@ -3,6 +3,9 @@ package com.terri.datasource.hbase;
  *  
  */  
   
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;  
   
 import org.apache.hadoop.conf.Configuration;  
@@ -38,6 +41,8 @@ public class HBaseTestCase {
             }  
   
             HBaseTestCase.create(tableName, columnFamily);  
+         
+
             HBaseTestCase.put(tableName, "row1", columnFamily, "column1",  
                     "data1");  
             HBaseTestCase.put(tableName, "row2", columnFamily, "column2",  
@@ -76,6 +81,10 @@ public class HBaseTestCase {
         }  
     }  
   
+    public static void put(){
+    	
+    	
+        }
     public static void put(String tablename, String row, String columnFamily,  
             String column, String data) throws Exception {  
   
@@ -85,7 +94,7 @@ public class HBaseTestCase {
         put.add(Bytes.toBytes(columnFamily), Bytes.toBytes(column),  
                 Bytes.toBytes(data));  
   
-        table.put(put);  
+        table.put(put); 
   
         System.out.println("put '" + row + "', '" + columnFamily + ":" + column  
                 + "', '" + data + "'");  
