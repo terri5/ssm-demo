@@ -9,6 +9,8 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;  
 import org.apache.hadoop.hbase.HColumnDescriptor;  
 import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.Get;  
@@ -17,10 +19,11 @@ import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;  
 import org.apache.hadoop.hbase.client.Result;  
 import org.apache.hadoop.hbase.client.ResultScanner;  
-import org.apache.hadoop.hbase.client.Scan;  
+import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;  
   
-public class HBaseTestCase {  
+public class HBaseTestCase2 {  
   
     /** 
      * @param args 
@@ -38,24 +41,25 @@ public class HBaseTestCase {
                 System.out.println("Delete Table " + tableName + " success!");  
   
             }  
+            TableName tabName=TableName.valueOf(tableName, columnFamily);
   
-            HBaseTestCase.create(tableName, columnFamily);  
+            HBaseTestCase2.create(tabName, columnFamily);  
          
 
-            HBaseTestCase.put(tableName, "row1", columnFamily, "column1",  
+            HBaseTestCase2.put(tabName, "row1", columnFamily, "column1",  
                     "data1");  
-            HBaseTestCase.put(tableName, "row2", columnFamily, "column2",  
+            HBaseTestCase2.put(tabName, "row2", columnFamily, "column2",  
                     "data2");  
-            HBaseTestCase.put(tableName, "row3", columnFamily, "column3",  
+            HBaseTestCase2.put(tabName, "row3", columnFamily, "column3",  
                     "data3");  
-            HBaseTestCase.put(tableName, "row4", columnFamily, "column4",  
+            HBaseTestCase2.put(tabName, "row4", columnFamily, "column4",  
                     "data4");  
-            HBaseTestCase.put(tableName, "row5", columnFamily, "column5",  
+            HBaseTestCase2.put(tabName, "row5", columnFamily, "column5",  
                     "data5");  
   
-            HBaseTestCase.get(tableName, "row1");  
+            HBaseTestCase2.get(tabName, "row1");  
   
-            HBaseTestCase.scan(tableName);  
+            HBaseTestCase2.scan(tabName);  
   
         } catch (Exception e) {  
             e.printStackTrace();  
@@ -75,11 +79,11 @@ public class HBaseTestCase {
                 
     }  
   
-    public static void create(String tableName, String columnFamily)  
+    public static void create(TableName tableName, String columnFamily)  
             throws Exception {  
         
-        HBaseAdmin admin = new HBaseAdmin(cfg);  
-        if (admin.tableExists(tableName)) {  
+        Admin admin = connection.getAdmin();
+        if (admin.tableExists(tableName))  {
             System.out.println(tableName + " exists!");  
         } else {  
             HTableDescriptor tableDesc = new HTableDescriptor(tableName);  
@@ -94,13 +98,13 @@ public class HBaseTestCase {
     	
         }
   
-    public static void put(String tablename, String row, String columnFamily,  
+    public static void put(TableName tablename, String row, String columnFamily,  
             String column, String data) throws Exception {  
   
-        HTable table = new HTable(cfg, tablename);  
+        Table table = connection.getTable(tablename);
         Put put = new Put(Bytes.toBytes(row));  
-  
-        put.add(Bytes.toBytes(columnFamily), Bytes.toBytes(column),  
+                    
+        put.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes(column),  
                 Bytes.toBytes(data));  
   
         table.put(put); 
@@ -110,16 +114,16 @@ public class HBaseTestCase {
   
     }  
   
-    public static void get(String tablename, String row) throws Exception {  
-        HTable table = new HTable(cfg, tablename);  
+    public static void get(TableName tablename, String row) throws Exception {  
+        Table table = connection.getTable(tablename);  
         Get get = new Get(Bytes.toBytes(row));  
         Result result = table.get(get);  
         System.out.println("Get: " + result);  
     }  
   
-    public static void scan(String tableName) throws Exception {  
+    public static void scan(TableName tableName) throws Exception {  
   
-        HTable table = new HTable(cfg, tableName);  
+    	   Table table = connection.getTable(tableName);  
         Scan s = new Scan();  
         ResultScanner rs = table.getScanner(s);  
   
@@ -129,9 +133,9 @@ public class HBaseTestCase {
         }  
     }  
   
-    public static boolean delete(String tableName) throws IOException {  
+    public static boolean delete(TableName tableName) throws IOException {  
   
-        HBaseAdmin admin =  		new HBaseAdmin(cfg);  
+        Admin admin = connection.getAdmin(); 
         if (admin.tableExists(tableName)) {  
             try {  
                 admin.disableTable(tableName);  
