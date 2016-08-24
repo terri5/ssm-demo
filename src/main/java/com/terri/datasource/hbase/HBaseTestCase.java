@@ -63,31 +63,24 @@ public class HBaseTestCase {
     }  
   
     static Configuration cfg = HBaseConfiguration.create();  
-    static Connection connection=null;
     static {  
-    	
-    	  try {
-			     connection = ConnectionFactory.createConnection(cfg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
         System.out.println(cfg.get("hbase.master"));  
                 
     }  
   
     public static void create(String tableName, String columnFamily)  
-            throws Exception {  
-        
-        HBaseAdmin admin = new HBaseAdmin(cfg);  
-        if (admin.tableExists(tableName)) {  
-            System.out.println(tableName + " exists!");  
-        } else {  
-            HTableDescriptor tableDesc = new HTableDescriptor(tableName);  
-            tableDesc.addFamily(new HColumnDescriptor(columnFamily));  
-            admin.createTable(tableDesc);  
-            System.out.println(tableName + " create successfully!");  
-        }  
-    }  
+	        throws Exception {  
+	
+	    HBaseAdmin admin = new HBaseAdmin(cfg);  
+	    if (admin.tableExists(tableName)) {  
+	        System.out.println(tableName + " exists!");  
+	    } else {  
+	        HTableDescriptor tableDesc = new HTableDescriptor(tableName);  
+	        tableDesc.addFamily(new HColumnDescriptor(columnFamily));  
+	        admin.createTable(tableDesc);  
+	        System.out.println(tableName + " create successfully!");  
+	    }  
+	}  
   
     public static void put(){
     	
